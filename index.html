@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Random Quote Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Itim', cursive;
+}
+
+body{
+    width: 100%;
+    height: 100vh;
+    background-color: #eef0f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quote-box{
+    width: 40%;
+    padding: 40px;
+    background: linear-gradient(145deg, #d5d5d5, #fefefe);
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 20px 20px 60px #c9c9c9, -20px -20px 60px #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.quote-box h3{
+    font-size: 32px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.quote-box h3::after{
+    content: '';
+    width: 75px;
+    height: 3px;
+    border-radius: 3px;
+    background-color: black;
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.quote-box blockquote{
+    font-size: 26px;
+    min-height: 110px;
+}
+
+.quote-box blockquote .loader{
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    border: 20px solid #fff;
+    border-radius: 50%;
+    border-top: 20px solid #03a9f4;
+    animation: spinner 2s linear infinite;
+}
+
+@keyframes spinner {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+.quote-box span{
+    align-self: flex-end;
+    position: relative;
+}
+
+.quote-box span::before{
+    content: '';
+    width: 20px;
+    height: 2px;
+    background-color: black;
+    position: absolute;
+    top: 50%;
+    left: -23px;
+}
+
+.quote-box span.author-box::before{
+    display: none;
+}
+
+.btn-box{
+    width: 100%;
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-box .btn{
+    background-color: #03a9f4;
+    color: #fff;
+    width: 150px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    border-radius: 25px;
+    border: 1px solid #03a9f4;
+}
+
+.btn-box .btn:nth-child(2){
+    background: transparent;
+    color: black;
+}
+
+.btn-box .btn img{
+    width: 30px;
+    margin-right: 4px;
+}
+
+@media only screen and (max-width: 1200px){
+    .quote-box{
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 425px){
+    .quote-box{
+        width: 90%;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="quote-box">
+        <h3>Quotes Of The Day</h3>
+        <blockquote id="quote">
+            <p class="loader"></p>
+        </blockquote>
+        <span id="author"></span>
+        <div class="btn-box">
+            <button class="btn" onclick=" getQuote(api)">New Quote</button>
+            <button class="btn" onclick="shareTwitter()"><img src="./twitter.png" alt=""> Twitter</button>
+        </div>
+    </div>
+
+
+    <script>
+        const api = 'https://dummyjson.com/quotes/random';
+        const showQuote = document.getElementById('quote');
+        const showAuthor = document.getElementById('author');
+
+        showAuthor.classList.add('author-box')
+        async function getQuote(url){
+
+            await fetch(url)
+            .then(data => data.json())
+            .then(item => {
+                showQuote.innerText = '"' + item.quote + '"'
+                showAuthor.innerText = item.author
+                showAuthor.classList.remove('author-box')
+            })
+        }
+
+        getQuote(api)
+
+        function shareTwitter(){
+            window.open('https://twitter.com/intent/tweet?text=' + showQuote.innerText + '-' +showAuthor.innerText, 'Twitter Window', 'width=600, height=600')
+        }
+    </script>
+</body>
+</html>
